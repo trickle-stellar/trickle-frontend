@@ -18,7 +18,7 @@ labels: frontend, good first issue
 - [ ] Component uses TypeScript props interface
 - [ ] Styled with Tailwind (no external CSS)
 - [ ] Client directive added if interactive
-- [ ] `npm run build` passes
+- [ ] `pnpm build` passes
 - [ ] Responsive on mobile and desktop
 
 ## Context

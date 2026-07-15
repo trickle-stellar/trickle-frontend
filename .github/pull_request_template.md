@@ -8,8 +8,8 @@
 
 # Testing
 
-- [ ] `npm run build` passes
-- [ ] `npm run lint` passes
+- [ ] `pnpm build` passes
+- [ ] `pnpm lint` passes
 - [ ] Responsive on mobile and desktop
 - [ ] Wallet connect/disconnect works (if applicable)
 
