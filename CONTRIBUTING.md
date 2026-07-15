@@ -5,15 +5,15 @@ Welcome — thanks for helping build Trickle. This guide covers the Next.js fron
 ## Prerequisites
 
 - Node.js 18+
-- npm or pnpm
+- pnpm
 - Freighter browser extension (for wallet testing)
 
 ## Getting Started
 
 ```bash
 cp .env.example .env
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 The app starts at `http://localhost:3000`.
@@ -129,9 +129,9 @@ When implementing, replace mock returns with real `fetch` calls and remove the T
 ## Development Commands
 
 ```bash
-npm run dev        # Development server (port 3000)
-npm run build      # Production build
-npm run lint       # ESLint
+pnpm dev        # Development server (port 3000)
+pnpm build      # Production build
+pnpm lint       # ESLint
 ```
 
 ## Code Style

@@ -76,8 +76,8 @@ Browser
 
 ```bash
 cp .env.example .env    # edit with your values
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
