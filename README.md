@@ -94,35 +94,43 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Project Structure
 
 ```
-app/
-├── layout.tsx                     # Root layout (providers, metadata)
-├── loading.tsx                    # Global loading spinner
-├── not-found.tsx                  # 404 page
-├── error.tsx                      # Global error boundary
-├── globals.css                    # Tailwind imports + CSS variables
-├── (marketing)/
-│   ├── layout.tsx                 # Navbar + Footer layout
-│   ├── page.tsx                   # HOME — fully built
-│   ├── features/page.tsx          # Placeholder
-│   └── about/page.tsx             # Placeholder
-└── (app)/
-    ├── layout.tsx                 # Sidebar layout
-    ├── loading.tsx
-    ├── dashboard/page.tsx         # Placeholder
-    ├── streams/                   # 3 pages (list, create, detail)
-    ├── multistreams/              # 3 pages
-    ├── vesting/                   # 3 pages
-    ├── nfts/                      # 2 pages (list, detail)
-    └── settings/page.tsx          # Placeholder
-components/
-├── ui/                            # Button, Input, Card, Modal, Badge
-├── shared/                        # Navbar, Footer, Sidebar
-└── features/                      # WalletButton, StreamCard, etc.
-hooks/                             # useWallet, useApi
-services/                          # auth, streams, multistreams, vesting, streamNft, fees, indexer
-types/                             # TypeScript interfaces per domain
-lib/                               # constants, utils, stellar helpers
-providers/                         # WalletProvider, ThemeProvider
+trickle-frontend/
+├── app/
+│   ├── layout.tsx                # Root layout (providers, metadata)
+│   ├── loading.tsx               # Global loading spinner
+│   ├── not-found.tsx             # 404 page
+│   ├── error.tsx                 # Global error boundary
+│   ├── globals.css               # Tailwind imports + CSS variables
+│   ├── (marketing)/
+│   │   ├── layout.tsx            # Navbar + Footer layout
+│   │   ├── page.tsx              # HOME — fully built
+│   │   ├── features/page.tsx
+│   │   └── about/page.tsx
+│   └── (app)/
+│       ├── layout.tsx            # Sidebar layout
+│       ├── loading.tsx
+│       ├── dashboard/page.tsx
+│       ├── streams/              # 3 pages (list, create, detail)
+│       ├── multistreams/         # 3 pages
+│       ├── vesting/              # 3 pages
+│       ├── nfts/                 # 2 pages (list, detail)
+│       └── settings/page.tsx
+├── components/
+│   ├── ui/                       # Button, Card, Input, Modal, Badge + tests
+│   ├── shared/                   # Navbar, Footer, Sidebar
+│   └── features/                 # WalletButton, StreamCard, etc.
+├── hooks/                        # useWallet, useApi
+├── services/                     # auth, streams, multistreams, vesting, streamNft, fees, indexer
+├── types/                        # TypeScript interfaces per domain
+├── lib/                          # constants, utils + tests, stellar helpers
+├── providers/                    # WalletProvider, ThemeProvider
+├── .github/workflows/ci.yml
+├── vitest.config.ts              # Test configuration
+├── tailwind.config.ts
+├── next.config.js
+├── tsconfig.json
+├── package.json
+└── .env.example
 ```
 
 ## Contributing
