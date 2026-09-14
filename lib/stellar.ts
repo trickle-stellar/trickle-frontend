@@ -1,38 +1,72 @@
-/**
- * Stellar SDK helpers.
- *
- * TODO: Implement when Freighter and Stellar SDK integration is needed.
- *
- * Planned helpers:
- *   - createStreamTransaction(sender, recipient, asset, amount, duration)
- *   - signTransactionWithFreighter(xdr)
- *   - submitSignedTransaction(signedXdr)
- *   - getAccountBalance(address, asset?)
- *   - getContractData(contractAddress, key)
- *
- * These will use:
- *   - @stellar/stellar-sdk for transaction building
- *   - @stellar/freighter-api for wallet signing
- */
+import {
+  isConnected,
+  requestAccess,
+  getAddress,
+  signTransaction,
+} from '@stellar/freighter-api';
 
-export {};
+export interface FreighterResult<T = void> {
+  ok: boolean;
+  data?: T;
+  error?: string;
+}
 
-// TODO: Implement transaction builders
-// import * as StellarSdk from '@stellar/stellar-sdk';
-//
-// export async function buildStreamTransaction(
-//   sender: string,
-//   recipient: string,
-//   asset: string,
-//   amount: string,
-//   duration: number,
-// ): Promise<string> {
-//   // 1. Load sender account from Horizon
-//   // 2. Build transaction with factory.create_stream() operation
-//   // 3. Return XDR for client signing
-// }
-//
-// export async function signWithFreighter(xdr: string): Promise<string> {
-//   const freighter = await import('@stellar/freighter-api');
-//   return freighter.signTransaction(xdr);
-// }
+export interface SignResult {
+  ok: boolean;
+  signedTxXdr?: string;
+  signerAddress?: string;
+  error?: string;
+}
+
+export async function isFreighterConnected(): Promise<boolean> {
+  const result = await isConnected();
+  return result.isConnected && !result.error;
+}
+
+export async function requestFreighterAccess(): Promise<FreighterResult<{ address: string }>> {
+  const connected = await isFreighterConnected();
+  if (!connected) {
+    return { ok: false, error: 'Freighter is not installed' };
+  }
+
+  const result = await requestAccess();
+  if (result.error) {
+    return { ok: false, error: result.error.message };
+  }
+  return { ok: true, data: { address: result.address } };
+}
+
+export async function getWalletAddress(): Promise<FreighterResult<{ address: string }>> {
+  const connected = await isFreighterConnected();
+  if (!connected) {
+    return { ok: false, error: 'Freighter is not installed' };
+  }
+
+  const result = await getAddress();
+  if (result.error) {
+    return { ok: false, error: result.error.message };
+  }
+  if (!result.address) {
+    return { ok: false, error: 'App not authorized' };
+  }
+  return { ok: true, data: { address: result.address } };
+}
+
+export async function signXdrWithFreighter(
+  xdr: string,
+  networkPassphrase: string,
+  address?: string,
+): Promise<SignResult> {
+  const result = await signTransaction(xdr, {
+    networkPassphrase,
+    ...(address ? { address } : {}),
+  });
+  if (result.error) {
+    return { ok: false, error: result.error.message };
+  }
+  return {
+    ok: true,
+    signedTxXdr: result.signedTxXdr,
+    signerAddress: result.signerAddress,
+  };
+}

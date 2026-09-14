@@ -4,7 +4,7 @@ import { useWallet } from '@/hooks/useWallet';
 import { Button } from '@/components/ui/Button';
 
 export function WalletButton() {
-  const { address, isConnected, isLoading, connect, disconnect } = useWallet();
+  const { address, isConnected, isLoading, connect, disconnect, error } = useWallet();
 
   if (isConnected && address) {
     return (
@@ -20,8 +20,13 @@ export function WalletButton() {
   }
 
   return (
-    <Button onClick={connect} loading={isLoading} size="sm">
-      Connect Wallet
-    </Button>
+    <div className="flex flex-col gap-1">
+      <Button onClick={connect} loading={isLoading} size="sm">
+        Connect Wallet
+      </Button>
+      {error && (
+        <span className="text-xs text-red-400">{error}</span>
+      )}
+    </div>
   );
 }
