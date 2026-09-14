@@ -1,76 +1,77 @@
-import type { Stream, StreamBalance, StreamEvent, CreateStreamRequest } from '@/types/stream';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
-
-/**
- * Streams service — wraps /streams API endpoints.
- *
- * TODO: All functions return mock data. Replace with real fetch calls.
- */
+import type {
+  Stream,
+  StreamBalance,
+  CreateStreamRequest,
+  CreateStreamResponse,
+  SubmitStreamResponse,
+  TxXdrResponse,
+} from '@/types/stream';
+import { api } from '@/lib/api';
 
 export async function getStreamByAddress(address: string): Promise<Stream> {
-  // TODO: GET ${API_URL}/streams/${address}
-  return {
-    contractAddress: address,
-    sender: 'G...SENDER',
-    recipient: 'G...RECIPIENT',
-    asset: 'CASLZ...XLM',
-    streamAmount: '1000000000',
-    claimedAmount: '500000000',
-    flowRate: '31709791',
-    startTime: '1700000000',
-    duration: 2592000,
-    status: 'active',
-  };
+  return api.get<Stream>(`/streams/${encodeURIComponent(address)}`);
 }
 
 export async function getStreamBalance(address: string): Promise<StreamBalance> {
-  // TODO: GET ${API_URL}/streams/${address}/balance (real-time Soroban RPC)
-  return { claimable: '600000000' };
+  return api.get<StreamBalance>(`/streams/${encodeURIComponent(address)}/balance`);
 }
 
 export async function getStreamsBySender(sender: string): Promise<Stream[]> {
-  // TODO: GET ${API_URL}/streams/sender/${sender}
-  return [];
+  return api.get<Stream[]>(`/streams/sender/${encodeURIComponent(sender)}`);
 }
 
 export async function getStreamsByRecipient(recipient: string): Promise<Stream[]> {
-  // TODO: GET ${API_URL}/streams/recipient/${recipient}
-  return [];
+  return api.get<Stream[]>(`/streams/recipient/${encodeURIComponent(recipient)}`);
 }
 
-export async function getStreamHistory(address: string): Promise<StreamEvent[]> {
-  // TODO: GET ${API_URL}/streams/history/${address}
-  return [];
+export async function createStream(
+  request: CreateStreamRequest,
+): Promise<CreateStreamResponse> {
+  return api.post<CreateStreamResponse>('/streams', request);
 }
 
-export async function createStream(request: CreateStreamRequest): Promise<{ txXdr: string }> {
-  // TODO: POST ${API_URL}/streams
-  // const res = await fetch(`${API_URL}/streams`, {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(request),
-  // });
-  // return res.json();
-  return { txXdr: 'mock-created-stream-xdr' };
+export async function submitStream(
+  signedXdr: string,
+): Promise<SubmitStreamResponse> {
+  return api.post<SubmitStreamResponse>('/streams/submit', { signedXdr });
 }
 
-export async function withdrawStream(address: string, recipient: string): Promise<{ txXdr: string }> {
-  // TODO: POST ${API_URL}/streams/${address}/withdraw
-  return { txXdr: 'mock-withdraw-xdr' };
+export async function withdrawStream(
+  address: string,
+  recipient: string,
+): Promise<TxXdrResponse> {
+  return api.post<TxXdrResponse>(
+    `/streams/${encodeURIComponent(address)}/withdraw`,
+    { recipient },
+  );
 }
 
-export async function cancelStream(address: string, sender: string): Promise<{ txXdr: string }> {
-  // TODO: POST ${API_URL}/streams/${address}/cancel
-  return { txXdr: 'mock-cancel-xdr' };
+export async function pauseStream(
+  address: string,
+  sender: string,
+): Promise<TxXdrResponse> {
+  return api.post<TxXdrResponse>(
+    `/streams/${encodeURIComponent(address)}/pause`,
+    { sender },
+  );
 }
 
-export async function pauseStream(address: string, sender: string): Promise<{ txXdr: string }> {
-  // TODO: POST ${API_URL}/streams/${address}/pause
-  return { txXdr: 'mock-pause-xdr' };
+export async function resumeStream(
+  address: string,
+  sender: string,
+): Promise<TxXdrResponse> {
+  return api.post<TxXdrResponse>(
+    `/streams/${encodeURIComponent(address)}/resume`,
+    { sender },
+  );
 }
 
-export async function resumeStream(address: string, sender: string): Promise<{ txXdr: string }> {
-  // TODO: POST ${API_URL}/streams/${address}/resume
-  return { txXdr: 'mock-resume-xdr' };
+export async function cancelStream(
+  address: string,
+  sender: string,
+): Promise<TxXdrResponse> {
+  return api.post<TxXdrResponse>(
+    `/streams/${encodeURIComponent(address)}/cancel`,
+    { sender },
+  );
 }
